@@ -7,7 +7,9 @@ package com.osetskiy.messeger_restful_demo.service;
 
 import com.osetskiy.messeger_restful_demo.database.DataBase;
 import com.osetskiy.messeger_restful_demo.model.Message;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,40 @@ public class MessageService {
           
           return new ArrayList<Message>(messages.values());
      }
+     
+     public  List<Message> getAllMessagesByYear(int year){
+    	 
+    	 List<Message> messagesByYear = new ArrayList<Message>();
+    	 Calendar calendar = Calendar.getInstance();
+    	 for(Message message:messages.values())
+    	 {
+    		 calendar.setTime(message.getCreated());
+    		 if(calendar.get(Calendar.YEAR)==year){
+    			 messagesByYear.add(message);   			 
+    		 }    		 
+    	 }
+    	 
+         return messagesByYear;
+    }
+     
+     
+     public  List<Message> getAllMessagesPaginated(int start,int  size)
+     {
+    	 List<Message> messagesPagineted = new ArrayList<Message>(messages.values());
+    	    		 
+    	 if(start+size>messagesPagineted.size()) {
+    		 return new ArrayList<Message>();
+    	 }
+    	 return messagesPagineted.subList(start, start+size);
+    	 
+    	 
+     }
+     
+     
+     
+     
+      
+     
      public Message addMessage(Message message)
      {
            message.setId(messages.size()+1);

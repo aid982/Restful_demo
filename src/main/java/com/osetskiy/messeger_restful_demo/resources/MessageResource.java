@@ -10,6 +10,7 @@ import com.osetskiy.messeger_restful_demo.service.MessageService;
 
 import java.util.List;
 
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,6 +19,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -30,10 +32,24 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 public class MessageResource {
      private MessageService messageService = new MessageService();
-     @GET
-     @Produces(MediaType.APPLICATION_JSON)
-     public List<Message> getMessages(){
+     @GET     
+     //public List<Message> getMessages(@QueryParam("year") int year,
+    //		 @QueryParam("start") int start,
+    //		 @QueryParam("size") int size){
+       public List<Message> getMessages(@BeanParam MessageFilterBean filterBean){
+    	 if (filterBean.getYear()>0) {
+    		 return messageService.getAllMessagesByYear(filterBean.getYear());
+    		 
+    	 }
+    	 if (filterBean.getSize()>0&&filterBean.getStart()>0){
+    		 return messageService.getAllMessagesPaginated(filterBean.getStart(),filterBean.getSize());  		 
+   		 
+    	 }	 
+    	 
+    	 
+    	 
           return messageService.getAllMessages();
+         
           
      }
      
